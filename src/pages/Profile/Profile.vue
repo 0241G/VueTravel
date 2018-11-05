@@ -6,17 +6,17 @@
           </a>
         </header>
         <section class="profile-number">
-          <router-link to="/login" class="profile-link">
+          <router-link :to="userinfo._id ? '/userInfo':'/login'" class="profile-link">
             <div class="profile_image">
               <i class="iconfont icon-person"></i>
             </div>
             <div class="user-info">
-              <p class="user-info-top">登录/注册</p>
+              <p class="user-info-top" >{{userinfo.name || '登录/注册'}}</p>
               <p>
                 <span class="user-icon">
                   <i class="iconfont icon-shouji icon-mobile"></i>
                 </span>
-                <span class="icon-mobile-number">暂无绑定手机号</span>
+                <span class="icon-mobile-number" v-if="userinfo.phone">{{userinfo.phone || '暂无绑定手机号'}}</span>
               </p>
             </div>
             <span class="arrow">
@@ -95,8 +95,8 @@
             </div>
           </a>
         </section>
+        <!-- 服务中心 -->
         <section class="profile_my_order border-1px">
-          <!-- 服务中心 -->
           <a href="javascript:" class="my_order">
             <span>
               <i class="iconfont icon-fuwu"></i>
@@ -109,6 +109,10 @@
             </div>
           </a>
         </section>
+        <section class="profile_my_order border-1px" v-if="userinfo._id">
+          <mt-button class="logout" style="width:100%" type="danger" @click="logout">退出登陆</mt-button>
+        </section>
+
 </section>
 
 </template>
@@ -116,11 +120,32 @@
 <script>
   import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
   import Login from '../Login/Login.vue'
+  import {mapState} from 'vuex'
+  import {MessageBox,Toast} from 'mint-ui'
  export default {
    data () {
      return {
 
      }
+   },
+   methods: {
+     logout () {
+       MessageBox.confirm('确定执行此操作?').then(
+         action => {        
+          this.$store.dispatch('logout')
+          Toast({
+            message: '退出成功',
+            iconClass: 'icon icon-success'
+          })
+        },
+        action =>{
+         
+        }
+      )
+     }
+   },
+   computed: {
+     ...mapState(['userinfo'])
    },
    components: {
      HeaderTop,
