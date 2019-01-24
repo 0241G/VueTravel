@@ -1,0 +1,4 @@
+打开gshop-server_final，在cmd中使用npm start启动
+依赖下载npm install
+打开gshop-client，在cmd中使用npm start启动
+确保安装了nodejs
